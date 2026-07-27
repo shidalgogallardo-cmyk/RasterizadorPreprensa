@@ -36,6 +36,11 @@ jobs:
       run: |
         pyinstaller --noconfirm --onedir --windowed --name="RasterizadorPreprensa" --icon="icono.ico" --collect-all PyQt5 --collect-all PIL --collect-all pypdf prepress_app.py
 
+    - name: Comprimir artefacto Windows
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        Compress-Archive -Path dist/RasterizadorPreprensa -DestinationPath dist/RasterizadorPreprensa-Windows.zip
+
     - name: Subir artefacto macOS
       if: startsWith(matrix.os, 'macos')
       uses: actions/upload-artifact@v4
@@ -48,4 +53,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: RasterizadorPreprensa-Windows
-        path: dist/RasterizadorPreprensa.exe
+        path: dist/RasterizadorPreprensa-Windows.zip
