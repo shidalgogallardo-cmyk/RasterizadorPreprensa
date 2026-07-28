@@ -509,7 +509,30 @@ Verifica:
 def main():
     try:
         app = QApplication(sys.argv)
-        
+        app.setStyleSheet("""
+        QLabel {
+            color: palette(text);
+        }
+        QTextEdit {
+            background-color: palette(base);
+            color: palette(text);
+            selection-background-color: #0078D7;
+            selection-color: #FFFFFF;
+        }
+        QComboBox {
+            background-color: palette(base);
+            color: palette(text);
+            border: 1px solid palette(mid);
+            border-radius: 4px;
+            padding: 3px;
+        }
+        QComboBox QAbstractItemView {
+            background-color: palette(base);
+            color: palette(text);
+            selection-background-color: #0078D7;
+            selection-color: #FFFFFF;
+        }
+    """)
         # Validación de Ghostscript
         gs_paths = ['gs', '/opt/homebrew/bin/gs', '/usr/local/bin/gs']
         gs_found = False
