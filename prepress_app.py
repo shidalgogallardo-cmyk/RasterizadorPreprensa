@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PREPRESS PDF OPTIMIZER v4.0
+RASTERIZADOR DE PREPRENSA v4.0
 Aplicación profesional para rasterizar PDFs de periódicos
 - Rasterización con opciones 200/250/300 DPI
 - Convierte todo a imagen (texto incluido)
@@ -203,8 +203,8 @@ class PrePressApp(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PrePress PDF Optimizer v4.0")
-        self.setGeometry(100, 100, 1100, 850)
+        self.setWindowTitle("Rasterizador de Preprensa v4.0")
+        self.setGeometry(100, 100, 1100, 890)
         
         self.current_pdf = None
         self.pdf_info = None
@@ -238,10 +238,10 @@ class PrePressApp(QMainWindow):
         self.info_text.setReadOnly(True)
         self.info_text.setMinimumHeight(140)
         self.info_text.setStyleSheet("""
-            background-color: #f5f5f5;
-            border: 1px solid #ccc;
+            background-color: #262626;
+            border: 1px solid #404040;
             padding: 10px;
-            color: #1a1a1a;
+            color: #ffffff;
             font-family: Menlo, Monaco, monospace;
             font-size: 11px;
         """)
@@ -256,7 +256,7 @@ class PrePressApp(QMainWindow):
         self.warning_text.setReadOnly(True)
         self.warning_text.setMaximumHeight(80)
         self.warning_text.setStyleSheet("""
-            background-color: #fff3cd;
+            background-color: #ffecb3;
             border: 2px solid #ffc107;
             color: #856404;
             font-weight: bold;
@@ -276,7 +276,6 @@ class PrePressApp(QMainWindow):
         self.dpi_combo.addItem("250 DPI")
         self.dpi_combo.addItem("300 DPI", 2)
         self.dpi_combo.setCurrentIndex(2)  # 300 DPI por defecto
-        self.dpi_combo.setStyleSheet("color: #1a1a1a;")
         dpi_layout.addWidget(self.dpi_combo)
         dpi_layout.addStretch()
         
@@ -290,10 +289,10 @@ class PrePressApp(QMainWindow):
         self.progress_bar = QProgressBar()
         self.progress_bar.setMinimum(0)
         self.progress_bar.setMaximum(100)
-        self.progress_bar.setStyleSheet("QProgressBar::chunk { background-color: #4CAF50; }")
+        self.progress_bar.setStyleSheet("QProgressBar::chunk { background-color: #00a844; }")
         progress_layout.addWidget(self.progress_bar)
         self.status_label = QLabel("Esperando archivo...")
-        self.status_label.setStyleSheet("color: #1a1a1a; font-weight: bold;")
+        self.status_label.setStyleSheet("color: #ffffff; font-weight: bold;")
         progress_layout.addWidget(self.status_label)
         
         button_layout = QHBoxLayout()
@@ -301,17 +300,6 @@ class PrePressApp(QMainWindow):
         self.process_btn.clicked.connect(self.start_processing)
         self.process_btn.setMinimumHeight(40)
         self.process_btn.setEnabled(False)
-        self.process_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                font-weight: bold;
-                border-radius: 5px;
-            }
-            QPushButton:disabled {
-                background-color: #cccccc;
-            }
-        """)
         self.cancel_btn = QPushButton("Cancelar")
         self.cancel_btn.clicked.connect(self.cancel_processing)
         self.cancel_btn.setMinimumHeight(40)
@@ -329,20 +317,42 @@ class PrePressApp(QMainWindow):
         self.result_text.setReadOnly(True)
         self.result_text.setMinimumHeight(70)
         self.result_text.setStyleSheet("""
-            background-color: #e8f5e9;
-            border: 1px solid #4CAF50;
-            color: #1a1a1a;
+            background-color: #262626;
+            border: 1px solid #404040;
+            color: #ffffff;
             font-family: Menlo, Monaco, monospace;
             font-size: 11px;
         """)
         result_layout.addWidget(self.result_text)
         result_group.setLayout(result_layout)
         layout.addWidget(result_group)
+
+        # Footer con autoría y bandera peruana
+        footer_layout = QHBoxLayout()
+        footer_label = QLabel("Autor: Sebastian Hidalgo")
+        footer_label.setStyleSheet("font-style: italic; color: #a0a0a0; font-size: 12px;")
+        flag_label = QLabel("🇵🇪")
+        flag_label.setStyleSheet("font-size: 14px;")
+        
+        footer_layout.addStretch()
+        footer_layout.addWidget(footer_label)
+        footer_layout.addWidget(flag_label)
+        footer_layout.addStretch()
+        layout.addLayout(footer_layout)
         
         main_widget.setLayout(layout)
     
     def apply_styles(self):
-        self.setStyleSheet("QGroupBox { font-weight: bold; border: 2px solid #e0e0e0; border-radius: 5px; margin-top: 10px; padding-top: 15px; }")
+        self.setStyleSheet("""
+            QGroupBox { 
+                font-weight: bold; 
+                border: 1px solid #404040; 
+                border-radius: 6px; 
+                margin-top: 10px; 
+                padding-top: 15px; 
+                color: #ffffff;
+            }
+        """)
     
     def get_selected_dpi(self) -> int:
         """Obtiene el DPI seleccionado del combo"""
@@ -503,61 +513,90 @@ Verifica:
             background-color: #ffebee;
             border: 1px solid #f44336;
             color: #c62828;
+            font-family: Menlo, Monaco, monospace;
+            font-size: 11px;
         """)
 
 
-def main():
-    try:
+if __name__ == '__main__':
+    if not QApplication.instance():
         app = QApplication(sys.argv)
-        app.setStyleSheet("""
-        QLabel {
-            color: palette(text);
+    else:
+        app = QApplication.instance()
+
+    app.setStyle("Fusion")
+    
+    app.setStyleSheet("""
+        QMainWindow, QWidget {
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
-        QTextEdit {
-            background-color: palette(base);
-            color: palette(text);
-            selection-background-color: #0078D7;
-            selection-color: #FFFFFF;
+        QLabel {
+            color: #ffffff;
+        }
+        QTextEdit, QPlainTextEdit, QLineEdit {
+            background-color: #262626;
+            color: #ffffff;
+            border: 1px solid #404040;
+            selection-background-color: #008037;
         }
         QComboBox {
-            background-color: palette(base);
-            color: palette(text);
-            border: 1px solid palette(mid);
+            background-color: #262626;
+            color: #ffecb3;
+            border: 1px solid #595959;
             border-radius: 4px;
-            padding: 3px;
+            padding: 4px 10px;
+            font-weight: bold;
         }
+        QComboBox::drop-down {
+            subcontrol-origin: padding;
+            subcontrol-position: top right;
+            width: 25px;
+            border-left: 1px solid #595959;
+        }
+        /* Lista desplegable flotante con el color crema exacto de la alerta */
         QComboBox QAbstractItemView {
-            background-color: palette(base);
-            color: palette(text);
-            selection-background-color: #0078D7;
-            selection-color: #FFFFFF;
+            background-color: #ffecb3; 
+            color: #1a1a1a;
+            selection-background-color: #00a844;
+            selection-color: #ffffff;
+            border: 1px solid #595959;
+            font-weight: bold;
+        }
+        QGroupBox {
+            color: #ffffff;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 5px;
+            color: #ffffff;
+        }
+        QPushButton {
+            background-color: #00a844;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-weight: bold;
+        }
+        QPushButton:hover {
+            background-color: #00c24f;
+        }
+        QPushButton:pressed {
+            background-color: #008f39;
+        }
+        QPushButton:disabled {
+            background-color: #404040;
+            color: #808080;
         }
     """)
-        # Validación de Ghostscript
-        gs_paths = ['gs', '/opt/homebrew/bin/gs', '/usr/local/bin/gs']
-        gs_found = False
-        for path in gs_paths:
-            try:
-                subprocess.run([path, '--version'], capture_output=True, check=True, timeout=5)
-                gs_found = True
-                break
-            except:
-                continue
-                
-        if not gs_found:
-            QMessageBox.critical(None, "Error", 
-                "Ghostscript no instalado o no encontrado.\n\nVerifica que esté instalado con Homebrew.")
-            sys.exit(1)
-        
-        window = PrePressApp()
-        window.show()
-        sys.exit(app.exec_())
-        
-    except Exception as e:
-        import traceback
-        print("ERROR CRITICO AL INICIAR:")
-        traceback.print_exc()
-        input("Presiona Enter para salir...")
 
-if __name__ == '__main__':
-    main()
+    gs_found = True
+    window = PrePressApp()
+    window.show()
+    sys.exit(app.exec_())
