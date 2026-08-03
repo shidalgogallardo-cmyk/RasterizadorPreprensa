@@ -29,12 +29,12 @@ jobs:
     - name: Compilar para macOS
       if: startsWith(matrix.os, 'macos')
       run: |
-        pyinstaller --noconfirm --onedir --windowed --name="RasterizadorPreprensa" --icon="icono.icns" --collect-all PyQt5 --collect-all PIL --collect-all pypdf prepress_app.py
+        pyinstaller --noconfirm --onedir --windowed --name="RasterizadorPreprensa" --icon="icono.icns" --collect-all PyQt5 --collect-all PIL --collect-all pypdf rasterizador_preprensa.py
 
     - name: Compilar para Windows
       if: startsWith(matrix.os, 'windows')
       run: |
-        pyinstaller --noconfirm --onedir --windowed --name="RasterizadorPreprensa" --icon="icono.ico" --collect-all PyQt5 --collect-all PIL --collect-all pypdf prepress_app.py
+        pyinstaller --noconfirm --onedir --windowed --name="RasterizadorPreprensa" --icon="icono.ico" --collect-all PyQt5 --collect-all PIL --collect-all pypdf rasterizador_preprensa.py
 
     - name: Comprimir artefacto macOS
       if: startsWith(matrix.os, 'macos')
