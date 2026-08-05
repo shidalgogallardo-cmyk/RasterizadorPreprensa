@@ -36,6 +36,7 @@ jobs:
         run: |
           mkdir -p dist/dmg
           cp -R "dist/RasterizadorDePDFs.app" dist/dmg/
+          ln -s /Applications dist/dmg/Applications
           hdiutil create -volname "RasterizadorDePDFs" \
             -srcfolder dist/dmg \
             -ov -format UDZO \
