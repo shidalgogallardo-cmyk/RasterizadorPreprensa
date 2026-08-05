@@ -277,7 +277,11 @@ class AppRasterizador(QWidget):
     # ---------- ICC ----------
     def auto_detect_wan_ifra_icc(self):
         if getattr(sys, 'frozen', False):
-            current_dir = os.path.dirname(sys.executable)
+            # PyInstaller (onedir/onefile) expone la carpeta de recursos empaquetados
+            # en sys._MEIPASS. Desde PyInstaller 6.x, en modo onedir los archivos
+            # añadidos con --add-data quedan en Contents/MacOS/_internal, NO junto
+            # al ejecutable — por eso NO se debe usar os.path.dirname(sys.executable).
+            current_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
         else:
             current_dir = os.path.dirname(os.path.abspath(__file__))
 
