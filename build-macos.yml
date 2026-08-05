@@ -1,0 +1,58 @@
+name: Build macOS App
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compilar app con PyInstaller
+        run: |
+          pyinstaller --noconfirm --windowed --onefile \
+            --name "RasterizadorDePDFs" \
+            --icon "icono.icns" \
+            --add-data "WAN-IFRAnewspaper26v5.icc:." \
+            rasterizador_pdfs.py
+
+      - name: Crear DMG
+        run: |
+          mkdir -p dist/dmg
+          cp -R "dist/RasterizadorDePDFs.app" dist/dmg/
+          hdiutil create -volname "RasterizadorDePDFs" \
+            -srcfolder dist/dmg \
+            -ov -format UDZO \
+            dist/RasterizadorDePDFs.dmg
+
+      - name: Subir artefacto (.app y .dmg)
+        uses: actions/upload-artifact@v4
+        with:
+          name: RasterizadorDePDFs-macOS
+          path: |
+            dist/RasterizadorDePDFs.dmg
+            dist/RasterizadorDePDFs.app
+
+      - name: Crear Release (solo si es un tag v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/RasterizadorDePDFs.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
