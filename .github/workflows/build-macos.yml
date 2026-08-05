@@ -26,7 +26,7 @@ jobs:
 
       - name: Compilar app con PyInstaller
         run: |
-          pyinstaller --noconfirm --windowed --onefile \
+          pyinstaller --noconfirm --windowed \
             --name "RasterizadorDePDFs" \
             --icon "icono.icns" \
             --add-data "WAN-IFRAnewspaper26v5.icc:." \
