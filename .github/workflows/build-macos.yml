@@ -13,9 +13,9 @@ jobs:
       matrix:
         include:
           - suffix: AppleSilicon
-            runner: macos-14
+            runner: macos-latest
           - suffix: Intel
-            runner: macos-13
+            runner: macos-15-intel
 
     runs-on: ${{ matrix.runner }}
 
