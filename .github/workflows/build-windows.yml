@@ -1,0 +1,51 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compilar app con PyInstaller
+        run: |
+          pyinstaller --noconfirm --windowed `
+            --name "RasterizadorDePDFs" `
+            --icon "icono.ico" `
+            --add-data "WAN-IFRAnewspaper26v5.icc;." `
+            rasterizador_pdfs.py
+
+      - name: Comprimir en ZIP
+        run: |
+          Compress-Archive -Path "dist\RasterizadorDePDFs" -DestinationPath "dist\RasterizadorDePDFs-Windows.zip"
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: RasterizadorDePDFs-Windows
+          path: dist/RasterizadorDePDFs-Windows.zip
+
+      - name: Crear Release (solo si es un tag v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/RasterizadorDePDFs-Windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
