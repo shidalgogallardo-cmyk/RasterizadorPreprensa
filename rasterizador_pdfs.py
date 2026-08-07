@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QRadioButton, QButtonGroup, QListWidget, QListWidgetItem, QAbstractItemView
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QDragEnterEvent, QDropEvent
+from PyQt6.QtGui import QDragEnterEvent, QDropEvent, QIcon
 import fitz  # PyMuPDF
 from PIL import Image
 import pikepdf
@@ -28,8 +28,26 @@ class AppRasterizador(QWidget):
         self.icc_path = ""
         self.mode = "individual"        # "individual" | "lote"
         self.setAcceptDrops(True)
+        self.setup_app_icon()
         self.initUI()
         self.auto_detect_wan_ifra_icc()
+
+    def setup_app_icon(self):
+        # Necesario para la barra de tareas en Windows (Qt no toma el ícono
+        # incrustado por PyInstaller automáticamente ahí, a diferencia del
+        # Dock en macOS que sí lo hace solo). Busca junto al ejecutable
+        # empaquetado (sys._MEIPASS) o junto al script en modo desarrollo.
+        if getattr(sys, 'frozen', False):
+            base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
+        else:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+
+        candidatos = ["icono.ico", "icono.icns"] if sys.platform == "win32" else ["icono.icns", "icono.ico"]
+        for nombre in candidatos:
+            ruta = os.path.join(base_dir, nombre)
+            if os.path.exists(ruta):
+                self.setWindowIcon(QIcon(ruta))
+                break
 
     def initUI(self):
         self.setWindowTitle("Rasterizador de PDFs")
