@@ -30,6 +30,7 @@ jobs:
             --name "RasterizadorDePDFs" `
             --icon "icono.ico" `
             --add-data "WAN-IFRAnewspaper26v5.icc;." `
+            --add-data "icono.ico;." `
             rasterizador_pdfs.py
 
       - name: Comprimir en ZIP

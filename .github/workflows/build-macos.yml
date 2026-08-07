@@ -39,6 +39,7 @@ jobs:
             --name "RasterizadorDePDFs" \
             --icon "icono.icns" \
             --add-data "WAN-IFRAnewspaper26v5.icc:." \
+            --add-data "icono.icns:." \
             rasterizador_pdfs.py
 
       - name: Crear DMG
